@@ -14,7 +14,7 @@ function App() {
       <div className='flex flex-1'>
         <Navigator />
         <Editor content={content} onContentChange={setContent} />
-        <OutputButtons content={content} />
+        <OutputButtons content={content} onOutputReady={setOutput} />
       </div>
       {output && <OutputPanel data={output} />}
     </div>
