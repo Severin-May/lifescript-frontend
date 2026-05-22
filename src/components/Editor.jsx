@@ -1,6 +1,49 @@
 import MonacoEditor from '@monaco-editor/react'
+import { useRef, useEffect } from 'react'
 
-function Editor({ content, onContentChange }) {
+function Editor({ content, onContentChange, output }) {
+
+  const editorRef = useRef(null)
+  const monacoRef = useRef(null)
+
+  const handleEditorMount = (editor, monaco) => {
+    editorRef.current = editor
+    monacoRef.current = monaco
+  }
+
+  useEffect(() => {
+    if (!editorRef.current || !monacoRef.current) return
+
+    const monaco = monacoRef.current
+    const editor = editorRef.current
+    const model = editor.getModel()
+
+    if (!output || !model) return
+
+    if (output.valid) {
+      monaco.editor.setModelMarkers(model, 'lifescript', [])
+      return
+    }
+
+    const markers = output.errors
+      .map(error => {
+        const match = error.match(/Line (\d+):/)
+        if (!match) return null
+        const line = parseInt(match[1])
+        return {
+          startLineNumber: line,
+          endLineNumber: line,
+          startColumn: 1,
+          endColumn: 100,
+          message: error,
+          severity: monaco.MarkerSeverity.Error
+        }
+      })
+      .filter(Boolean)
+
+    monaco.editor.setModelMarkers(model, 'lifescript', markers)
+  }, [output])
+
   const handleBeforeMount = (monaco) => {
     monaco.languages.register({ id: 'lifescript' })
 
@@ -110,6 +153,7 @@ function Editor({ content, onContentChange }) {
         value={content}
         onChange={onContentChange}
         beforeMount={handleBeforeMount}
+        onMount={handleEditorMount}
         options={{
           fontSize: 14,
           minimap: { enabled: false },
