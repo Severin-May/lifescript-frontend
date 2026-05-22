@@ -58,6 +58,47 @@ function Editor({ content, onContentChange }) {
       ],
       colors: {}
     })
+
+    // hover documentation
+    monaco.languages.registerHoverProvider('lifescript', {
+      provideHover: (model, position) => {
+        const word = model.getWordAtPosition(position)
+        if (!word) return null
+
+        const docs = {
+          'plan': '**plan**\n\nTop-level block that defines your weekly schedule.\n\n**Required:** `period`, `tasks`',
+          'period': '**period**\n\nDefines the date range of the plan.\n\n**Format:** `period: YYYY-MM-DD to YYYY-MM-DD`',
+          'settings': '**settings**\n\nCustomize default time ranges for named periods.\n\n**Example:** `morning: 06:00-12:00`',
+          'availability': '**availability**\n\nDefines when you are available for scheduling.\n\n**Options:** `off`, `flexible`, time ranges, named periods',
+          'task': '**task**\n\nDefines a schedulable activity.\n\n**Required:** `duration`, `priority`, `effort`\n\n**Optional:** `deadline`, `start`, `repeats`, `dependencies`, `note`',
+          'routine': '**routine**\n\nDefines a fixed block of activities.\n\n**Required:** `time`, `activities`\n\n**Optional:** `repeats`',
+          'duration': '**duration**\n\nHow long the task takes.\n\n**Format:** `2h`, `30m`, `1h30m`',
+          'priority': '**priority**\n\nHow important the task is.\n\n**Values:** `critical`, `high`, `medium`, `low`',
+          'effort': '**effort**\n\nHow much mental energy the task requires.\n\n**Values:** `high`, `moderate`, `low`',
+          'deadline': '**deadline**\n\nWhen the task must be completed by.\n\n**Format:** `YYYY-MM-DD` or day name',
+          'start': '**start**\n\nPins the task to a specific start time.\n\n**Format:** `HH:MM`',
+          'repeats': '**repeats**\n\nHow often the task or routine recurs.\n\n**Values:** `daily`, `weekdays`, `weekends`, or day names',
+          'dependencies': '**dependencies**\n\nTasks that must be completed before this one.\n\n**Format:** `"Task A", "Task B"`',
+          'note': '**note**\n\nFree text annotation for the task.\n\n**Format:** `"your note here"`',
+          'energy': '**energy profile**\n\nDefines your energy levels throughout the day.',
+          'daily': '**daily**\n\nRepeats every day of the period.',
+          'weekdays': '**weekdays**\n\nRepeats Monday through Friday.',
+          'weekends': '**weekends**\n\nRepeats Saturday and Sunday.',
+          'off': '**off**\n\nMarks the entire day as unavailable.',
+          'flexible': '**flexible**\n\nAvailable any time during the day (default: 08:00-18:00).',
+          'morning': '**morning**\n\nNamed time period (default: 08:00-12:00). Customizable in `settings`.',
+          'afternoon': '**afternoon**\n\nNamed time period (default: 12:00-17:00). Customizable in `settings`.',
+          'evening': '**evening**\n\nNamed time period (default: 17:00-21:00). Customizable in `settings`.',
+        }
+
+        const doc = docs[word.word]
+        if (!doc) return null
+
+        return {
+          contents: [{ value: doc }]
+        }
+      }
+    })
   }
 
   return (
