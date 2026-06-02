@@ -145,7 +145,7 @@ function Editor({ content, onContentChange, output }) {
   }
 
   return (
-    <div className='flex-1 h-full'>
+    <div className='w-full h-full'>
       <MonacoEditor
         height="100%"
         defaultLanguage="lifescript"
