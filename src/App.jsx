@@ -6,19 +6,37 @@ import OutputPanel from './components/OutputPanel'
 import { compile } from './api/lifescriptApi'
 
 function App() {
-  const [output, setOutput] = useState(null)
   const [content, setContent] = useState('')
+  const [syntaxOutput, setSyntaxOutput] = useState(null)
+  const [compileOutput, setCompileOutput] = useState(null)
 
   useEffect(() => {
-    if (!content) return
+    if (!content) {
+      setSyntaxOutput(null)
+      return
+    }
 
     const timer = setTimeout(async () => {
-      const result = await compile(content)
-      setOutput(result)
+      try {
+        const response = await fetch('/api/validate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content })
+        })
+        const result = await response.json()
+        setSyntaxOutput(result)
+      } catch (error) {
+        setSyntaxOutput({
+          valid: false,
+          errors: [`Network error: ${error.message}`]
+        })
+      }
     }, 500)
 
     return () => clearTimeout(timer)
   }, [content])
+
+  const output = compileOutput !== null ? compileOutput : syntaxOutput
 
   return (
     <div className='flex flex-col h-screen bg-gray-900 text-white overflow-hidden'>
@@ -31,7 +49,7 @@ function App() {
           </div>
           {output && <OutputPanel data={output} />}
         </div>
-        <OutputButtons content={content} onOutputReady={setOutput} />
+        <OutputButtons content={content} onOutputReady={setCompileOutput} />
       </div>
     </div>
   )

@@ -3,8 +3,15 @@ import { compile } from '../api/lifescriptApi'
 function OutputButtons({ content, onOutputReady }) {
 
     const handleCompile = async () => {
-        const result = await compile(content)
-        onOutputReady(result)
+        try {
+            const result = await compile(content)
+            onOutputReady(result)
+        } catch (error) {
+            onOutputReady({
+                valid: false,
+                errors: [`Compilation failed: ${error.message}`]
+            })
+        }
     }
 
     return (
