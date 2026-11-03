@@ -4,6 +4,7 @@ import Navigator from './components/Navigator'
 import OutputButtons from './components/OutputButtons'
 import OutputPanel from './components/OutputPanel'
 import ScheduleView from './components/ScheduleView'
+import TemplatePicker from './components/TemplatePicker'
 import { validate, clientError } from './api/lifescriptApi'
 
 function App() {
@@ -36,6 +37,11 @@ function App() {
     setScheduleOutdated(true)
   }
 
+  const pickTemplate = (template) => {
+    handleContentChange(template.build(new Date()))
+    editorRef.current?.focus()
+  }
+
   const showSchedule = (result) => {
     if (!result.schedule) return
     setSchedule(result.schedule)
@@ -56,8 +62,9 @@ function App() {
       <div className='flex flex-1 overflow-hidden'>
         <Navigator />
         <div className='flex flex-col flex-1 overflow-hidden'>
-          <div className='flex-1 min-h-0'>
+          <div className='flex-1 min-h-0 relative'>
             <Editor content={content} onContentChange={handleContentChange} output={output} editorRef={editorRef} />
+            {!content && <TemplatePicker onPick={pickTemplate} />}
           </div>
           {output && <OutputPanel data={output} onSelect={jumpTo} />}
         </div>

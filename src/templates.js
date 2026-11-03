@@ -183,7 +183,7 @@ tasks:
 }
 
 export const templates = [
-  { id: 'student', title: 'Student week', description: 'Lectures, study tasks with deadlines, an exam', build: studentWeek },
-  { id: 'work', title: 'Work week', description: 'Standups, meetings, tasks with priorities', build: workWeek },
-  { id: 'minimal', title: 'Minimal', description: 'One free day and one task, nothing else', build: minimal }
+  { id: 'student', icon: '🎓', title: 'Student week', description: 'Lectures, study tasks with deadlines, an exam', build: studentWeek },
+  { id: 'work', icon: '💼', title: 'Work week', description: 'Standups, meetings, tasks with priorities', build: workWeek },
+  { id: 'minimal', icon: '✏️', title: 'Minimal', description: 'One free day and one task, nothing else', build: minimal }
 ]
