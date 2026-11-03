@@ -1,8 +1,10 @@
+const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+
 async function post(path, content) {
   const response = await fetch(path, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ content })
+    body: JSON.stringify({ content, timeZone })
   })
   const result = await response.json().catch(() => null)
   if (!Array.isArray(result?.diagnostics)) {
