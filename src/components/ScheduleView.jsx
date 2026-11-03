@@ -33,6 +33,7 @@ function ScheduleView({ schedule }) {
       {dates.map(date => (
         <section key={date}>
           <h3 className='font-semibold text-gray-200 mb-2'>{formatDay(date)}</h3>
+          {schedule.days[date].length === 0 && <p className='text-gray-500'>Nothing scheduled</p>}
           <ul className='space-y-1'>
             {schedule.days[date].map((entry, i) => (
               <li key={i}>
