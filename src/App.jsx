@@ -30,6 +30,11 @@ function App() {
 
   const output = compileOutput !== null ? compileOutput : syntaxOutput
 
+  const handleContentChange = (value) => {
+    setContent(value)
+    setCompileOutput(null)
+  }
+
   const jumpTo = (d) => {
     const editor = editorRef.current
     if (!editor) return
@@ -45,7 +50,7 @@ function App() {
         <Navigator />
         <div className='flex flex-col flex-1 overflow-hidden'>
           <div className='flex-1 min-h-0'>
-            <Editor content={content} onContentChange={setContent} output={output} editorRef={editorRef} />
+            <Editor content={content} onContentChange={handleContentChange} output={output} editorRef={editorRef} />
           </div>
           {output && <OutputPanel data={output} onSelect={jumpTo} />}
         </div>
