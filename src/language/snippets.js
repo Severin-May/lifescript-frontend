@@ -1,9 +1,10 @@
+import { DAYS } from './keywords'
+
 // Monaco snippet syntax: ${1:default} is a tab stop, ${1|a,b|} a choice (the first is the default), $0 the end.
 // Defaults form valid blocks; dates default to tomorrow so they fall inside a period starting today, and
 // times avoid the routines and events in the templates.
 
 const choice = (n, values) => `\${${n}|${values.join(',')}|}`
-const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 
 const task = (n) => [
   `task: \${${n}:name}`,
@@ -15,7 +16,7 @@ const task = (n) => [
 const routine = (n) => [
   `routine: \${${n}:name}`,
   `    time: \${${n + 1}:06:30}`,
-  `    repeats: ${choice(n + 2, ['daily', 'weekdays', 'weekends', ...days])}`,
+  `    repeats: ${choice(n + 2, ['daily', 'weekdays', 'weekends', ...DAYS])}`,
   '    activities:',
   `        \${${n + 3}:activity}: \${${n + 4}:30m}`
 ]
@@ -36,7 +37,7 @@ export function snippets(today = new Date()) {
 
   return [
     { label: 'availability', detail: 'section: when you are free', section: true,
-      lines: ['availability:', `    ${choice(1, days)}:\${2:09:00-17:00}`] },
+      lines: ['availability:', `    ${choice(1, DAYS)}: \${2:09:00-17:00}`] },
     { label: 'energy profile', detail: 'section: your energy during the day', section: true,
       lines: [
         'energy profile:',
