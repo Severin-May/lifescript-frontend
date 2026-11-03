@@ -5,6 +5,8 @@ import OutputButtons from './components/OutputButtons'
 import OutputPanel from './components/OutputPanel'
 import ScheduleView from './components/ScheduleView'
 import TemplatePicker from './components/TemplatePicker'
+import TemplateMenu from './components/TemplateMenu'
+import ConfirmDialog from './components/ConfirmDialog'
 import { validate, clientError } from './api/lifescriptApi'
 
 function App() {
@@ -13,6 +15,7 @@ function App() {
   const [compileOutput, setCompileOutput] = useState(null)
   const [schedule, setSchedule] = useState(null)
   const [scheduleOutdated, setScheduleOutdated] = useState(false)
+  const [pendingTemplate, setPendingTemplate] = useState(null)
   const editorRef = useRef(null)
 
   useEffect(() => {
@@ -37,9 +40,15 @@ function App() {
     setScheduleOutdated(true)
   }
 
-  const pickTemplate = (template) => {
+  const applyTemplate = (template) => {
     handleContentChange(template.build(new Date()))
+    setPendingTemplate(null)
     editorRef.current?.focus()
+  }
+
+  const pickTemplate = (template) => {
+    if (content.trim()) setPendingTemplate(template)
+    else applyTemplate(template)
   }
 
   const showSchedule = (result) => {
@@ -58,7 +67,10 @@ function App() {
 
   return (
     <div className='flex flex-col h-screen bg-gray-900 text-white overflow-hidden'>
-      <h1 className='text-2xl font-bold p-4'>LifeScript</h1>
+      <header className='flex items-center gap-6 p-4'>
+        <h1 className='text-2xl font-bold'>LifeScript</h1>
+        <TemplateMenu onPick={pickTemplate} />
+      </header>
       <div className='flex flex-1 overflow-hidden'>
         <Navigator />
         <div className='flex flex-col flex-1 overflow-hidden'>
@@ -84,6 +96,14 @@ function App() {
         )}
         <OutputButtons content={content} onOutputReady={setCompileOutput} onScheduleRequested={showSchedule} />
       </div>
+      <ConfirmDialog
+        open={pendingTemplate !== null}
+        title='Replace your plan?'
+        message={`Your current plan will be replaced with the ${pendingTemplate?.title} template. You can undo this with Ctrl+Z.`}
+        confirmLabel='Replace'
+        onConfirm={() => applyTemplate(pendingTemplate)}
+        onCancel={() => setPendingTemplate(null)}
+      />
     </div>
   )
 }
