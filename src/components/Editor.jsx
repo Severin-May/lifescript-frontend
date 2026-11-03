@@ -127,7 +127,7 @@ function Editor({ content, onContentChange, output, editorRef }) {
         const word = model.getWordAtPosition(position)
         if (!word) return null
 
-        const energyDoc = '**energy profile**\n\nHow much energy you have during the day, so demanding tasks go where your energy is high.\n\n**Example:**\n```\nenergy profile:\n  default:\n    morning: high\n    evening: low\n  friday:\n    afternoon: low\n```'
+        const energyDoc = '**energy profile**\n\nHow much energy you have during the day, so demanding tasks go where your energy is high.\n\n**Example:**\n```\nenergy profile:\n    default:\n        morning: high\n        evening: low\n    friday:\n        afternoon: low\n```'
         const routineDoc = '**routine**\n\nA fixed block of activities that repeats.\n\n**Required:** `time` (start time), `repeats`, `activities`'
         const taskDoc = '**task**\n\nSomething to get done; the scheduler finds a time for it.\n\n**Required:** `duration`, `priority`, `effort`\n\n**Optional:** `deadline`, `repeats`, `dependencies`, `note`'
         const eventDoc = '**event**\n\nA one-off appointment at a fixed date and time.\n\n**Required:** `date`, `time`\n\n**Optional:** `note`'
@@ -195,6 +195,9 @@ function Editor({ content, onContentChange, output, editorRef }) {
           fontSize: 14,
           minimap: { enabled: false },
           scrollBeyondLastLine: false,
+          tabSize: 4,
+          insertSpaces: true,
+          detectIndentation: false,
         }}
       />
     </div>

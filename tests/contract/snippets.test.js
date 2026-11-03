@@ -12,7 +12,7 @@ function withDefaults(body) {
     .replace('$0', '')
 }
 
-const indent = (text) => text.split('\n').map(line => (line ? `  ${line}` : line)).join('\n')
+const indent = (text) => text.split('\n').map(line => (line ? `    ${line}` : line)).join('\n')
 
 // Monaco indents every snippet line like the line it was typed on; here that's the line under the header.
 function insertUnderHeader(plan, header, block) {
