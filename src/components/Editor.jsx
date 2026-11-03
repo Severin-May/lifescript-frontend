@@ -1,9 +1,8 @@
 import MonacoEditor from '@monaco-editor/react'
 import { useRef, useEffect } from 'react'
 
-function Editor({ content, onContentChange, output }) {
+function Editor({ content, onContentChange, output, editorRef }) {
 
-  const editorRef = useRef(null)
   const monacoRef = useRef(null)
 
   const handleEditorMount = (editor, monaco) => {
@@ -18,31 +17,21 @@ function Editor({ content, onContentChange, output }) {
     const editor = editorRef.current
     const model = editor.getModel()
 
-    if (!output || !model) return
+    if (!model) return
 
-    if (output.valid) {
-      monaco.editor.setModelMarkers(model, 'lifescript', [])
-      return
-    }
-
-    const markers = output.errors
-      .map(error => {
-        const match = error.match(/Line (\d+):/)
-        if (!match) return null
-        const line = parseInt(match[1])
-        return {
-          startLineNumber: line,
-          endLineNumber: line,
-          startColumn: 1,
-          endColumn: 100,
-          message: error,
-          severity: monaco.MarkerSeverity.Error
-        }
-      })
-      .filter(Boolean)
+    const markers = (output?.diagnostics ?? [])
+      .filter(d => d.startLineNumber > 0)
+      .map(d => ({
+        startLineNumber: d.startLineNumber,
+        startColumn: d.startColumn,
+        endLineNumber: d.endLineNumber,
+        endColumn: d.endColumn,
+        message: d.message,
+        severity: monaco.MarkerSeverity.Error
+      }))
 
     monaco.editor.setModelMarkers(model, 'lifescript', markers)
-  }, [output])
+  }, [output, editorRef])
 
   const handleBeforeMount = (monaco) => {
     monaco.languages.register({ id: 'lifescript' })

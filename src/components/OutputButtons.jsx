@@ -1,4 +1,4 @@
-import { compile } from '../api/lifescriptApi'
+import { compile, clientError } from '../api/lifescriptApi'
 
 function OutputButtons({ content, onOutputReady }) {
 
@@ -7,10 +7,7 @@ function OutputButtons({ content, onOutputReady }) {
             const result = await compile(content)
             onOutputReady(result)
         } catch (error) {
-            onOutputReady({
-                valid: false,
-                errors: [`Compilation failed: ${error.message}`]
-            })
+            onOutputReady(clientError(`Compilation failed: ${error.message}`))
         }
     }
 
