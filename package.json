@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "test": "vitest",
+    "test": "vitest --project unit",
+    "test:contract": "vitest run --project contract",
+    "test:all": "vitest run",
     "preview": "vite preview"
   },
   "dependencies": {

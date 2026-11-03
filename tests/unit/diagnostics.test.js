@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { toMarkers } from './diagnostics'
+import { toMarkers } from '../../src/diagnostics'
 
 const diagnostic = (overrides) => ({
   stage: 'VALIDATION',

@@ -15,5 +15,24 @@ export default defineConfig({
         changeOrigin: true,
       }
     }
+  },
+  test: {
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: 'unit',
+          include: ['tests/unit/**/*.test.{js,jsx}']
+        }
+      },
+      {
+        extends: true,
+        test: {
+          name: 'contract',
+          include: ['tests/contract/**/*.test.{js,jsx}'],
+          globalSetup: ['tests/support/checkBackend.js']
+        }
+      }
+    ]
   }
 })
