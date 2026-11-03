@@ -15,10 +15,7 @@ function App() {
   const editorRef = useRef(null)
 
   useEffect(() => {
-    if (!content) {
-      setSyntaxOutput(null)
-      return
-    }
+    if (!content) return
 
     const timer = setTimeout(async () => {
       try {
@@ -31,7 +28,7 @@ function App() {
     return () => clearTimeout(timer)
   }, [content])
 
-  const output = compileOutput !== null ? compileOutput : syntaxOutput
+  const output = !content ? null : compileOutput ?? syntaxOutput
 
   const handleContentChange = (value) => {
     setContent(value)

@@ -1,5 +1,6 @@
 import MonacoEditor from '@monaco-editor/react'
 import { useRef, useEffect } from 'react'
+import { toMarkers } from '../diagnostics'
 
 function Editor({ content, onContentChange, output, editorRef }) {
 
@@ -19,17 +20,7 @@ function Editor({ content, onContentChange, output, editorRef }) {
 
     if (!model) return
 
-    const markers = (output?.diagnostics ?? [])
-      .filter(d => d.startLineNumber > 0)
-      .map(d => ({
-        startLineNumber: d.startLineNumber,
-        startColumn: d.startColumn,
-        endLineNumber: d.endLineNumber,
-        endColumn: d.endColumn,
-        message: d.message,
-        severity: monaco.MarkerSeverity.Error
-      }))
-
+    const markers = toMarkers(output?.diagnostics, monaco.MarkerSeverity.Error)
     monaco.editor.setModelMarkers(model, 'lifescript', markers)
   }, [output, editorRef])
 
