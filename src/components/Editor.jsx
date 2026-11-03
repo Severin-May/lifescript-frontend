@@ -91,6 +91,23 @@ function Editor({ content, onContentChange, output, editorRef }) {
     providers.forEach(provider => provider.dispose())
     providers = []
 
+    // Enter indents one level after a block header; other lines keep their indentation.
+    const comment = String.raw`\s*(#.*)?$`
+    const days = 'monday|tuesday|wednesday|thursday|friday|saturday|sunday'
+    providers.push(monaco.languages.setLanguageConfiguration('lifescript', {
+      comments: { lineComment: '#' },
+      onEnterRules: [
+        {
+          beforeText: new RegExp(String.raw`^\s*(availability|energy\s+profile|settings|routines|tasks|events|activities|default|${days})\s*:` + comment, 'i'),
+          action: { indentAction: monaco.languages.IndentAction.Indent }
+        },
+        {
+          beforeText: new RegExp(String.raw`^\s*(task|routine|event)\s*:\s*[^\s#]+` + comment, 'i'),
+          action: { indentAction: monaco.languages.IndentAction.Indent }
+        }
+      ]
+    }))
+
     providers.push(monaco.languages.registerCompletionItemProvider('lifescript', {
       provideCompletionItems: (model, position) => {
         const beforeCursor = model.getLineContent(position.lineNumber).slice(0, position.column - 1)
