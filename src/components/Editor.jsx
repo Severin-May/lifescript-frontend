@@ -1,6 +1,10 @@
 import MonacoEditor from '@monaco-editor/react'
 import { useRef, useEffect } from 'react'
 import { toMarkers } from '../diagnostics'
+import { snippets } from '../snippets'
+
+// Monaco keeps providers globally; without disposing, each remount or hot reload would add duplicates.
+let providers = []
 
 function Editor({ content, onContentChange, output, editorRef }) {
 
@@ -84,8 +88,41 @@ function Editor({ content, onContentChange, output, editorRef }) {
       colors: {}
     })
 
+    providers.forEach(provider => provider.dispose())
+    providers = []
+
+    providers.push(monaco.languages.registerCompletionItemProvider('lifescript', {
+      provideCompletionItems: (model, position) => {
+        const beforeCursor = model.getLineContent(position.lineNumber).slice(0, position.column - 1)
+        const match = beforeCursor.match(/^(\s*)[\p{L}_ ]*$/u)
+        if (!match) return { suggestions: [] }
+
+        const indented = match[1].length > 0
+        const word = model.getWordUntilPosition(position)
+        const range = {
+          startLineNumber: position.lineNumber,
+          endLineNumber: position.lineNumber,
+          startColumn: match[1].length + 1,
+          endColumn: word.endColumn
+        }
+
+        return {
+          suggestions: snippets()
+            .filter(snippet => !!snippet.section !== indented)
+            .map(snippet => ({
+              label: snippet.label,
+              detail: snippet.detail,
+              kind: monaco.languages.CompletionItemKind.Snippet,
+              insertText: snippet.body,
+              insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+              range
+            }))
+        }
+      }
+    }))
+
     // hover documentation
-    monaco.languages.registerHoverProvider('lifescript', {
+    providers.push(monaco.languages.registerHoverProvider('lifescript', {
       provideHover: (model, position) => {
         const word = model.getWordAtPosition(position)
         if (!word) return null
@@ -141,7 +178,7 @@ function Editor({ content, onContentChange, output, editorRef }) {
           contents: [{ value: doc }]
         }
       }
-    })
+    }))
   }
 
   return (
