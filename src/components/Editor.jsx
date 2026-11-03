@@ -37,31 +37,33 @@ function Editor({ content, onContentChange, output, editorRef }) {
     monaco.languages.register({ id: 'lifescript' })
 
     monaco.languages.setMonarchTokensProvider('lifescript', {
+      ignoreCase: true,
+      unicode: true,
       keywords: [
-        'plan', 'period', 'settings', 'availability', 'energy', 'profile',
-        'routines', 'routine', 'tasks', 'task', 'activities', 'default'
+        'plan', 'period', 'settings', 'availability', 'energy', 'profile', 'default',
+        'routines', 'routine', 'activities', 'tasks', 'task', 'events', 'event'
       ],
       properties: [
-        'duration', 'priority', 'effort', 'deadline', 'start',
-        'repeats', 'dependencies', 'note', 'time'
+        'duration', 'priority', 'effort', 'deadline', 'repeats',
+        'dependencies', 'note', 'time', 'date'
       ],
       values: [
         'high', 'moderate', 'low', 'critical', 'medium',
-        'morning', 'afternoon', 'evening', 'off', 'flexible',
+        'morning', 'afternoon', 'evening', 'flexible',
         'daily', 'weekdays', 'weekends', 'to'
       ],
       days: [
-        'Monday', 'Tuesday', 'Wednesday', 'Thursday',
-        'Friday', 'Saturday', 'Sunday'
+        'monday', 'tuesday', 'wednesday', 'thursday',
+        'friday', 'saturday', 'sunday'
       ],
       tokenizer: {
         root: [
           [/[0-9]{4}-[0-9]{2}-[0-9]{2}/, 'date'],
           [/[0-9]{2}:[0-9]{2}/, 'time'],
-          [/[0-9]+[hm]([0-9]+m)?/, 'duration'],
-          [/".*?"/, 'string'],
+          [/[0-9]+h([0-9]+m)?|[0-9]+m/, 'duration'],
+          [/"[^"]*"/, 'string'],
           [/#.*$/, 'comment'],
-          [/[a-zA-Z]+/, {
+          [/[\p{L}_][\p{L}\p{M}\p{N}_]*/, {
             cases: {
               '@keywords': 'keyword',
               '@properties': 'property',
