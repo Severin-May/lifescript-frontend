@@ -19,9 +19,22 @@ npm run dev       # http://localhost:5173; /api is proxied to the backend
 | Script | Does |
 |---|---|
 | `npm run dev` | start the dev server |
-| `npm test` | run the tests, rerunning on changes (`npx vitest run` runs them once) |
+| `npm test` | run the unit tests, rerunning on changes |
+| `npm run test:contract` | run the contract tests once (needs the backend) |
+| `npm run test:all` | run all tests once (needs the backend) |
 | `npm run lint` | check the code with ESLint |
 | `npm run build` | build for production into `dist/` |
+
+## Tests
+
+| Folder | Contains |
+|---|---|
+| `tests/unit/` | tests of single files, no backend needed; mirrors `src/` |
+| `tests/contract/` | runs the frontend's code on real backend responses, so a change to the API format fails here; one file per API feature |
+| `tests/support/` | shared test plans and backend setup |
+
+The contract tests call the backend on `http://localhost:8080` directly and stop with a clear error if it isn't
+running. Their plans use tomorrow's date, because a period can't start in the past.
 
 ## What it does
 
