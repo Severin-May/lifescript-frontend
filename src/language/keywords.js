@@ -2,7 +2,7 @@
 
 export const KEYWORDS = [
   'plan', 'period', 'settings', 'availability', 'energy', 'profile', 'default',
-  'routines', 'routine', 'activities', 'tasks', 'task', 'events', 'event'
+  'routines', 'routine', 'activities', 'tasks', 'task', 'events', 'event', 'break'
 ]
 
 export const PROPERTIES = [

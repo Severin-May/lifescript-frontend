@@ -43,6 +43,41 @@ describe('ScheduleView', () => {
     expect(html).toContain('chapter 2')
   })
 
+  describe('a break', () => {
+    const rest = (overrides) => entry({ type: 'BREAK', start: '11:00', end: '11:30', ...overrides })
+
+    it('is labelled with its length', () => {
+      const html = render({ days: { '2026-11-09': [rest()] } })
+
+      expect(html).toContain('11:00–11:30')
+      expect(html).toContain('Break · 30m')
+    })
+
+    it.each([
+      ['11:00', '13:00', '2h'],
+      ['11:00', '12:30', '1h30m'],
+      ['23:30', '00:00', '30m'],
+      ['11:00', '11:00', '0m']
+    ])('from %s to %s lasts %s', (start, end, length) => {
+      expect(render({ days: { '2026-11-09': [rest({ start, end })] } })).toContain(`Break · ${length}`)
+    })
+
+    it("isn't shown as a task: no name, no task badge", () => {
+      const html = render({ days: { '2026-11-09': [rest({ name: 'research' })] } })
+
+      expect(html).not.toContain('research')
+      expect(html).not.toContain('>task<')
+      expect(html).not.toContain('>break<')
+    })
+
+    it('stays right below its task', () => {
+      const html = render({ days: { '2026-11-09': [entry(), rest(), entry({ type: 'EVENT', name: 'dentist', start: '14:00', end: '15:00' })] } })
+
+      expect(html.indexOf('research')).toBeLessThan(html.indexOf('Break · 30m'))
+      expect(html.indexOf('Break · 30m')).toBeLessThan(html.indexOf('dentist'))
+    })
+  })
+
   it('says when a day has nothing scheduled', () => {
     const html = render({ days: { '2026-11-09': [] } })
 

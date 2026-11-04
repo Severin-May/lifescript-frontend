@@ -18,6 +18,9 @@ function studentWeek(today) {
 plan: student_week
 period: ${day(0)} to ${day(6)}        # at most 7 days, not in the past
 
+settings:
+    break: 10m                          # rest around everything scheduled; leave out for none
+
 availability:                           # when tasks may be scheduled
     monday: afternoon, evening          # named periods: morning, afternoon, evening
     tuesday: afternoon, evening
@@ -90,6 +93,9 @@ function workWeek(today) {
   return `# A work week. Change anything; errors show up as you type.
 plan: work_week
 period: ${day(0)} to ${day(6)}        # at most 7 days, not in the past
+
+settings:
+    break: 10m                          # rest around everything scheduled; leave out for none
 
 availability:                           # when tasks may be scheduled
     monday: 09:00-17:00

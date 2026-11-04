@@ -58,3 +58,41 @@ tasks:
 export function lineOf(plan, text) {
   return plan.split('\n').findIndex(line => line.includes(text)) + 1
 }
+
+// The plan's 10m break after quick_task; deep_work has its own 30m instead.
+export const breaksPlan = `plan: breaks
+period: ${tomorrow} to ${tomorrow}
+
+settings:
+    break: 10m
+
+availability:
+    ${tomorrowWeekday}: 09:00-13:00
+
+tasks:
+    task: quick_task
+        duration: 1h
+        priority: critical
+        effort: low
+
+    task: deep_work
+        duration: 1h
+        priority: high
+        effort: high
+        break: 30m
+`
+
+// The task fits in the free hour, but its own break must fit too.
+export const breakTooLongPlan = `plan: tight
+period: ${tomorrow} to ${tomorrow}
+
+availability:
+    ${tomorrowWeekday}: 09:00-10:00
+
+tasks:
+    task: tight_task
+        duration: 1h
+        priority: medium
+        effort: low
+        break: 30m
+`

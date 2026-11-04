@@ -27,8 +27,18 @@ describe('hoverDoc', () => {
       '**task**',
       'Something to get done; the scheduler finds a time for it.',
       '**Required:** `duration`, `priority`, `effort`',
-      '**Optional:** `deadline`, `repeats`, `dependencies`, `note`'
+      '**Optional:** `deadline`, `repeats`, `dependencies`, `note`, `break`'
     ].join('\n\n'))
+  })
+
+  it('explains break both in settings and in a task', () => {
+    const doc = hoverDoc('break')
+
+    expect(doc).toContain('In `settings`: kept free around everything scheduled')
+    expect(doc).toContain("if it isn't set, there are no breaks")
+    expect(doc).toContain("In a task: the rest after that task, replacing the plan's break")
+    expect(doc).toContain('must fit in free time')
+    expect(hoverDoc('settings')).toContain('`break`')
   })
 
   it('has no doc for names, even ones that are JavaScript object properties', () => {

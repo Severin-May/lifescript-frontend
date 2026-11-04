@@ -16,8 +16,8 @@ export const docs = {
     format: ['period: 2026-11-09 to 2026-11-15']
   },
   settings: {
-    text: 'Changes the times of the named periods.',
-    format: ['morning: 08:00-12:00']
+    text: 'Changes the times of the named periods and sets the plan\'s `break`.',
+    format: ['morning: 08:00-12:00', 'break: 10m']
   },
   availability: {
     text: 'When you are free, per day: `flexible`, named periods or time ranges. Days not listed are not available; days outside the period are ignored.',
@@ -43,7 +43,7 @@ export const docs = {
   task: {
     text: 'Something to get done; the scheduler finds a time for it.',
     required: ['duration', 'priority', 'effort'],
-    optional: ['deadline', 'repeats', 'dependencies', 'note']
+    optional: ['deadline', 'repeats', 'dependencies', 'note', 'break']
   },
   tasks: 'task',
   event: {
@@ -79,6 +79,10 @@ export const docs = {
   note: {
     text: 'Your own remark on a task or event, shown with it in the schedule.',
     format: ['note: "bring insurance card"']
+  },
+  break: {
+    text: 'Rest, 0m to 2h. In `settings`: kept free around everything scheduled; if it isn\'t set, there are no breaks. In a task: the rest after that task, replacing the plan\'s break there; unlike the plan\'s, it must fit in free time.',
+    format: ['break: 10m', 'break: 1h30m']
   },
   time: {
     text: 'In a routine: the start time, `time: 07:00`. In an event: a time range or named period, `time: 14:00-15:00` or `time: afternoon`.'

@@ -34,6 +34,7 @@ export function snippets(today = new Date()) {
   const tomorrow = [date.getFullYear(), date.getMonth() + 1, date.getDate()].map(v => String(v).padStart(2, '0')).join('-')
 
   const withDeadline = [...task(1), `    deadline: \${5:${tomorrow}} \${6:17:00}`]
+  const withBreak = [...task(1), `    break: \${5:30m}`]
 
   return [
     { label: 'availability', detail: 'section: when you are free', section: true,
@@ -46,14 +47,15 @@ export function snippets(today = new Date()) {
         `        afternoon: ${choice(2, ['moderate', 'high', 'low'])}`,
         `        evening: ${choice(3, ['low', 'high', 'moderate'])}`
       ] },
-    { label: 'settings', detail: 'section: change morning, afternoon, evening', section: true,
-      lines: ['settings:', `    ${choice(1, ['morning', 'afternoon', 'evening'])}:\${2:08:00-12:00}`] },
+    { label: 'settings', detail: 'section: named periods and the break around everything', section: true,
+      lines: ['settings:', `    ${choice(1, ['morning', 'afternoon', 'evening'])}: \${2:08:00-12:00}`, '    break: ${3:10m}'] },
     { label: 'routines', detail: 'section with one routine', section: true, lines: ['routines:', ...indent(routine(1))] },
     { label: 'tasks', detail: 'section with one task', section: true, lines: ['tasks:', ...indent(task(1))] },
     { label: 'events', detail: 'section with one event', section: true, lines: ['events:', ...indent(event(1, tomorrow))] },
     { label: 'routine', detail: 'a routine with all required properties', lines: routine(1) },
     { label: 'task', detail: 'a task with all required properties', lines: task(1) },
     { label: 'task with deadline', detail: 'a task that must be done by a date and time', lines: withDeadline },
+    { label: 'task with break', detail: 'a task with its own rest after it', lines: withBreak },
     { label: 'event', detail: 'a one-off event', lines: event(1, tomorrow) }
   ].map(({ lines, ...snippet }) => ({ ...snippet, body: [...lines, '$0'].join('\n') }))
 }

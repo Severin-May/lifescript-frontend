@@ -23,6 +23,48 @@ function formatEnd(end) {
   return end === '00:00' ? '24:00' : end
 }
 
+const minutesOf = (time) => {
+  const [h, m] = time.split(':').map(Number)
+  return h * 60 + m
+}
+
+// Written like a LifeScript duration: 30m, 2h, 1h30m.
+function formatLength(start, end) {
+  const total = (end === '00:00' ? 24 * 60 : minutesOf(end)) - minutesOf(start)
+  const h = Math.floor(total / 60)
+  const m = total % 60
+  return `${h ? `${h}h` : ''}${m || !h ? `${m}m` : ''}`
+}
+
+function EntryRow({ entry }) {
+  return (
+    <>
+      <div className='flex items-center gap-2'>
+        <span className='font-mono text-gray-300 w-24 shrink-0'>
+          {entry.start}–{formatEnd(entry.end)}
+        </span>
+        <span className='text-white truncate'>{entry.name}</span>
+        <span className={`ml-auto text-xs px-1.5 rounded ${typeStyles[entry.type] ?? 'bg-gray-700'}`}>
+          {entry.type.toLowerCase()}
+        </span>
+      </div>
+      {entry.note && <p className='text-gray-400 pl-26 italic'>{entry.note}</p>}
+    </>
+  )
+}
+
+// The rest after the task above it: muted, and no name or badge, so it doesn't read as another task.
+function BreakRow({ entry }) {
+  return (
+    <div className='flex items-center gap-2 text-xs text-gray-500'>
+      <span className='font-mono w-24 shrink-0'>
+        {entry.start}–{formatEnd(entry.end)}
+      </span>
+      <span className='italic'>Break · {formatLength(entry.start, entry.end)}</span>
+    </div>
+  )
+}
+
 function ScheduleView({ schedule }) {
   const dates = Object.keys(schedule.days).sort()
 
@@ -37,16 +79,7 @@ function ScheduleView({ schedule }) {
           <ul className='space-y-1'>
             {schedule.days[date].map((entry, i) => (
               <li key={i}>
-                <div className='flex items-center gap-2'>
-                  <span className='font-mono text-gray-300 w-24 shrink-0'>
-                    {entry.start}–{formatEnd(entry.end)}
-                  </span>
-                  <span className='text-white truncate'>{entry.name}</span>
-                  <span className={`ml-auto text-xs px-1.5 rounded ${typeStyles[entry.type] ?? 'bg-gray-700'}`}>
-                    {entry.type.toLowerCase()}
-                  </span>
-                </div>
-                {entry.note && <p className='text-gray-400 pl-26 italic'>{entry.note}</p>}
+                {entry.type === 'BREAK' ? <BreakRow entry={entry} /> : <EntryRow entry={entry} />}
               </li>
             ))}
           </ul>
