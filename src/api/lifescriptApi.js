@@ -1,4 +1,4 @@
-const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+import { timeZone } from './timeZone'
 
 async function post(path, content) {
   const response = await fetch(path, {
