@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { validate } from '../../src/api/compilerApi'
 import { toMarkers } from '../../src/diagnostics'
 import { useBackend } from '../support/backend'
-import { fullPlan, missingDependencyPlan, lineOf } from '../support/plans'
+import { fullPlan, missingDependencyPlan, lineOf, applyEdit } from '../support/plans'
 
 describe('diagnostics contract', () => {
   useBackend()
@@ -24,5 +24,18 @@ describe('diagnostics contract', () => {
     const result = await validate(fullPlan)
 
     expect(result).toEqual({ valid: true, diagnostics: [], schedule: null })
+  })
+
+  it('applying the quick fix makes a misspelled priority valid', async () => {
+    const typoPlan = fullPlan.replace('priority: high', 'priority: hgh')
+
+    const before = await validate(typoPlan)
+    expect(before.valid).toBe(false)
+
+    const [fix] = before.diagnostics[0].fixes
+    const fixed = fix.edits.reduceRight((text, edit) => applyEdit(text, edit), typoPlan)
+
+    expect(fixed).toBe(fullPlan)
+    expect(await validate(fixed)).toEqual(expect.objectContaining({ valid: true }))
   })
 })

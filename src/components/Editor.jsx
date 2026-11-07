@@ -2,6 +2,7 @@ import MonacoEditor from '@monaco-editor/react'
 import { useRef, useEffect } from 'react'
 import { toMarkers } from '../diagnostics'
 import { registerLifeScript, LANGUAGE_ID, THEME_ID } from '../language'
+import { setFixableDiagnostics } from '../language/quickFixes'
 
 function Editor({ content, onContentChange, output, editorRef }) {
 
@@ -23,6 +24,10 @@ function Editor({ content, onContentChange, output, editorRef }) {
 
     const markers = toMarkers(output?.diagnostics, monaco.MarkerSeverity.Error)
     monaco.editor.setModelMarkers(model, LANGUAGE_ID, markers)
+    setFixableDiagnostics(output?.diagnostics ?? [], model.getVersionId())
+
+    // Monaco only dims the "View Problem" box once its error is gone; close it when nothing is left.
+    if (markers.length === 0) editor.getContribution('editor.contrib.markerController')?.close(false)
   }, [output, editorRef])
 
   return (

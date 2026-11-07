@@ -43,5 +43,8 @@ export const theme = {
     { token: 'duration', foreground: 'b5cea8' },
     { token: 'comment', foreground: '6a9955', fontStyle: 'italic' }
   ],
-  colors: {}
+  colors: {
+    'editorLightBulb.foreground': '#FFCC00',
+    'editorLightBulbAutoFix.foreground': '#FFCC00'
+  }
 }

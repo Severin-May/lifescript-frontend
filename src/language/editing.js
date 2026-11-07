@@ -17,3 +17,14 @@ export function languageConfiguration(monaco) {
     ]
   }
 }
+
+// F-key shortcuts don't reach the browser on many laptops (media keys), so problems are reached with Alt+N.
+export function keybindingRules(monaco) {
+  const { KeyMod, KeyCode } = monaco
+  return [
+    { keybinding: KeyMod.Alt | KeyCode.F8, command: null },
+    { keybinding: KeyMod.Shift | KeyMod.Alt | KeyCode.F8, command: null },
+    { keybinding: KeyMod.Alt | KeyCode.KeyN, command: 'editor.action.marker.next' },
+    { keybinding: KeyMod.Shift | KeyMod.Alt | KeyCode.KeyN, command: 'editor.action.marker.prev' }
+  ]
+}

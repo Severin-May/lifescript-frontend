@@ -59,6 +59,17 @@ export function lineOf(plan, text) {
   return plan.split('\n').findIndex(line => line.includes(text)) + 1
 }
 
+// Applies a backend fix edit (Monaco positions: 1-based, end exclusive) to plain text.
+export function applyEdit(plan, edit) {
+  const lines = plan.split('\n')
+  const offset = (line, column) =>
+    lines.slice(0, line - 1).reduce((sum, l) => sum + l.length + 1, 0) + column - 1
+
+  const start = offset(edit.startLineNumber, edit.startColumn)
+  const end = offset(edit.endLineNumber, edit.endColumn)
+  return plan.slice(0, start) + edit.text + plan.slice(end)
+}
+
 // The plan's 10m break after quick_task; deep_work has its own 30m instead.
 export const breaksPlan = `plan: breaks
 period: ${tomorrow} to ${tomorrow}

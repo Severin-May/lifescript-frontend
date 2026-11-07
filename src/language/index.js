@@ -1,7 +1,8 @@
 import { tokenizer, theme } from './syntax'
-import { languageConfiguration } from './editing'
+import { languageConfiguration, keybindingRules } from './editing'
 import { completionProvider } from './completion'
 import { hoverDoc } from './hoverDocs'
+import { quickFixProvider } from './quickFixes'
 
 export const LANGUAGE_ID = 'lifescript'
 export const THEME_ID = 'lifescript-theme'
@@ -18,7 +19,11 @@ export function registerLifeScript(monaco) {
   registered = [
     monaco.languages.setMonarchTokensProvider(LANGUAGE_ID, tokenizer),
     monaco.languages.setLanguageConfiguration(LANGUAGE_ID, languageConfiguration(monaco)),
+    monaco.editor.addKeybindingRules(keybindingRules(monaco)),
     monaco.languages.registerCompletionItemProvider(LANGUAGE_ID, completionProvider(monaco)),
+    monaco.languages.registerCodeActionProvider(LANGUAGE_ID, quickFixProvider(monaco), {
+      providedCodeActionKinds: ['quickfix']
+    }),
     monaco.languages.registerHoverProvider(LANGUAGE_ID, {
       provideHover: (model, position) => {
         const word = model.getWordAtPosition(position)
