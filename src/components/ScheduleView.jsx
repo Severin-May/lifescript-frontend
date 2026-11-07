@@ -1,21 +1,17 @@
+import { parseIsoDate } from '../dates'
+
 const typeStyles = {
   ROUTINE: 'bg-purple-900 text-purple-200',
   EVENT: 'bg-amber-900 text-amber-200',
   TASK: 'bg-blue-900 text-blue-200'
 }
 
-// Built from the parts: new Date('YYYY-MM-DD') is UTC midnight and can land on the previous day.
-function toDate(iso) {
-  const [y, m, d] = iso.split('-').map(Number)
-  return new Date(y, m - 1, d)
-}
-
 function formatDay(iso) {
-  return toDate(iso).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })
+  return parseIsoDate(iso).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })
 }
 
 function formatShortDate(iso) {
-  return toDate(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+  return parseIsoDate(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
 // The backend sends "00:00" as the end of an entry that runs until midnight.

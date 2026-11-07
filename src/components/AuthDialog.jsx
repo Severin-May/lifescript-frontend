@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import Modal from './Modal'
-import { ApiError } from '../api/http'
 
 const modes = {
   login: { tab: 'Log in', submit: 'Log in', passwordAutocomplete: 'current-password' },
@@ -27,7 +26,7 @@ function AuthDialog({ initialMode = 'login', onLogin, onRegister, onClose }) {
       await (mode === 'login' ? onLogin : onRegister)(email, password)
       onClose()
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Couldn't reach the server")
+      setError(err.message)
     } finally {
       setBusy(false)
     }

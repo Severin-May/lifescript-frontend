@@ -1,10 +1,10 @@
-// A period can't be in the past, so test plans use tomorrow.
-const date = new Date()
-date.setDate(date.getDate() + 1)
+import { addDays, toIsoDate, weekdayName } from '../../src/dates'
 
-export const tomorrow = [date.getFullYear(), date.getMonth() + 1, date.getDate()]
-  .map(n => String(n).padStart(2, '0')).join('-')
-export const tomorrowWeekday = date.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase()
+// A period can't be in the past, so test plans use tomorrow.
+const date = addDays(new Date(), 1)
+
+export const tomorrow = toIsoDate(date)
+export const tomorrowWeekday = weekdayName(date)
 
 // Only 09:00-11:00 is free: report fits right before its deadline (a warning), big_project fits nowhere.
 export const fullPlan = `plan: contract_test

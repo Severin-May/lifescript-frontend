@@ -1,15 +1,10 @@
+import { addDays, toIsoDate, weekdayName } from './dates'
+
 // Starter plans for the 7 days from today. Events and deadlines sit at fixed day offsets (never today, which
 // may be nearly over), and their times avoid every routine, so any start weekday gives a valid plan.
 
 function week(today) {
-  const dates = Array.from({ length: 7 }, (_, n) => {
-    const date = new Date(today.getFullYear(), today.getMonth(), today.getDate() + n)
-    return {
-      iso: [date.getFullYear(), date.getMonth() + 1, date.getDate()].map(v => String(v).padStart(2, '0')).join('-'),
-      weekday: date.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase()
-    }
-  })
-  return { day: n => dates[n].iso, weekday: n => dates[n].weekday }
+  return { day: n => toIsoDate(addDays(today, n)), weekday: n => weekdayName(addDays(today, n)) }
 }
 
 function studentWeek(today) {

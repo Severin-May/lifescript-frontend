@@ -51,11 +51,13 @@ Every request sends the browser's time zone, so "today" and "now" are the user's
 | Path | Contains |
 |---|---|
 | `src/App.jsx` | the page: live validation, compile results, the schedule panel |
-| `src/api/lifescriptApi.js` | the calls to the backend |
+| `src/api/` | the calls to the backend: `http.js` (CSRF header, errors), compiling, accounts, saved plans |
+| `src/hooks/` | state and side effects kept out of components: login, the open plan, the plan list, Ctrl+S |
+| `src/components/sidebar/` | the activity bar with the Explorer (saved plans) and the cheat sheet |
 | `src/components/Editor.jsx` | the Monaco editor and its error markers |
 | `src/components/OutputPanel.jsx` | the list of errors under the editor |
 | `src/components/ScheduleView.jsx` | the schedule as a list per day |
 | `src/components/Template*.jsx` | the template cards and menu |
 | `src/language/` | LifeScript in the editor: keywords, highlighting, hover docs, auto-indent, snippets |
 | `src/templates.js` | the starter plans |
-| `src/diagnostics.js` | turns backend diagnostics into editor markers |
+| `src/diagnostics.js` | turns backend diagnostics into editor markers; builds the error shown when a request fails |

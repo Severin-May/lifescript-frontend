@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { compile } from '../../src/api/lifescriptApi'
+import { compile } from '../../src/api/compilerApi'
 import { snippets } from '../../src/language/snippets'
 import { templates } from '../../src/templates'
 import { useBackend } from '../support/backend'

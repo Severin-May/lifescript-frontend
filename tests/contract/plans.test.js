@@ -9,6 +9,7 @@ const statusOf = (promise) => promise.then(() => 'ok', error => error instanceof
 describe('accounts and saved plans contract', () => {
   useBrowserSession()
 
+  // Ten requests in a row, password hashing included: slower than 5 s right after the backend starts.
   it('saves, updates, refuses a stale update, deletes and logs out', async () => {
     const email = `contract-${crypto.randomUUID()}@example.com`
     expect(await register(email, 'password123')).toEqual({ id: expect.any(String), email })
@@ -33,5 +34,5 @@ describe('accounts and saved plans contract', () => {
     await logout()
     expect(await currentUser()).toBeNull()
     expect(await statusOf(listPlans())).toBe(401)
-  })
+  }, 20_000)
 })

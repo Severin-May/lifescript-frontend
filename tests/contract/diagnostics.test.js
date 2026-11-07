@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { validate } from '../../src/api/lifescriptApi'
+import { validate } from '../../src/api/compilerApi'
 import { toMarkers } from '../../src/diagnostics'
 import { useBackend } from '../support/backend'
 import { fullPlan, missingDependencyPlan, lineOf } from '../support/plans'

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import * as authApi from '../api/authApi'
+import { onUnauthorized } from '../api/http'
 
 export function useAuth() {
   const [user, setUser] = useState(null)
@@ -12,6 +13,8 @@ export function useAuth() {
       .catch(() => setUser(null))
       .finally(() => setChecked(true))
   }, [])
+
+  useEffect(() => onUnauthorized(() => setUser(null)), [])
 
   const login = async (email, password) => setUser(await authApi.login(email, password))
   const register = async (email, password) => setUser(await authApi.register(email, password))

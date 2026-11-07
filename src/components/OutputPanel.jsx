@@ -6,7 +6,7 @@ function OutputPanel({ data, onSelect }) {
       {data.valid ? (
         <>
           <p className='text-green-400 font-semibold mb-3'>✅ No errors found</p>
-          <p className='text-gray-300 text-sm'>Use buttons above to generate calendar, graph, or export.</p>
+          <p className='text-gray-300 text-sm'>Click Calendar on the right to see your schedule.</p>
         </>
       ) : (
         <>
@@ -14,14 +14,16 @@ function OutputPanel({ data, onSelect }) {
           <ul className='text-red-300 text-sm space-y-1'>
             {data.diagnostics?.map((d, i) => {
               const message = d.stage === 'INTERNAL' ? 'There was an internal error' : d.message
-              const placed = d.startLineNumber > 0
               return (
-                <li
-                  key={i}
-                  onClick={placed ? () => onSelect(d) : undefined}
-                  className={placed ? 'cursor-pointer hover:text-red-100 hover:underline' : ''}
-                >
-                  {placed ? `Line ${d.startLineNumber}: ${message}` : message}
+                <li key={i}>
+                  {d.startLineNumber > 0 ? (
+                    <button
+                      onClick={() => onSelect(d)}
+                      className='text-left rounded hover:text-red-100 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-red-300'
+                    >
+                      Line {d.startLineNumber}: {message}
+                    </button>
+                  ) : message}
                 </li>
               )
             })}

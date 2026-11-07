@@ -11,3 +11,19 @@ export function toMarkers(diagnostics, severity) {
       severity
     }))
 }
+
+export function clientError(message) {
+  return {
+    valid: false,
+    diagnostics: [{
+      stage: 'CLIENT',
+      severity: 'ERROR',
+      message,
+      startLineNumber: 0,
+      startColumn: 0,
+      endLineNumber: 0,
+      endColumn: 0
+    }],
+    schedule: null
+  }
+}

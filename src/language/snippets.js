@@ -1,4 +1,5 @@
 import { DAYS } from './keywords'
+import { addDays, toIsoDate } from '../dates'
 
 // Monaco snippet syntax: ${1:default} is a tab stop, ${1|a,b|} a choice (the first is the default), $0 the end.
 // Defaults form valid blocks; dates default to tomorrow so they fall inside a period starting today, and
@@ -30,8 +31,7 @@ const event = (n, date) => [
 const indent = (lines) => lines.map(line => `    ${line}`)
 
 export function snippets(today = new Date()) {
-  const date = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1)
-  const tomorrow = [date.getFullYear(), date.getMonth() + 1, date.getDate()].map(v => String(v).padStart(2, '0')).join('-')
+  const tomorrow = toIsoDate(addDays(today, 1))
 
   const withDeadline = [...task(1), `    deadline: \${5:${tomorrow}} \${6:17:00}`]
   const withBreak = [...task(1), `    break: \${5:30m}`]

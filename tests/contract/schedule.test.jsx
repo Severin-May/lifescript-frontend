@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { compile } from '../../src/api/lifescriptApi'
+import { compile } from '../../src/api/compilerApi'
 import ScheduleView from '../../src/components/ScheduleView'
 import { useBackend } from '../support/backend'
 import { fullPlan, breaksPlan, breakTooLongPlan, tomorrow } from '../support/plans'
