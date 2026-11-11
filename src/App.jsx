@@ -18,6 +18,7 @@ import { useSaveShortcut } from './hooks/useSaveShortcut'
 import { useLeaveWarning } from './hooks/useLeaveWarning'
 import { useLiveValidation } from './hooks/useLiveValidation'
 import { useCompile } from './hooks/useCompile'
+import { useScheduler } from './hooks/useScheduler'
 
 function App() {
   const [content, setContent] = useState('')
@@ -30,7 +31,8 @@ function App() {
   const editorRef = useRef(null)
 
   const validation = useLiveValidation(content)
-  const compiler = useCompile(content)
+  const [algorithm, setAlgorithm] = useScheduler()
+  const compiler = useCompile(content, algorithm)
   const output = !content ? null : compiler.output ?? validation
 
 
@@ -119,7 +121,7 @@ function App() {
         {compiler.schedule && (
           <SchedulePanel schedule={compiler.schedule} outdated={compiler.scheduleOutdated} onClose={compiler.closeSchedule} />
         )}
-        <OutputButtons onCompile={compiler.compile} />
+        <OutputButtons onCompile={compiler.compile} running={compiler.running} algorithm={algorithm} onAlgorithmChange={setAlgorithm} />
       </div>
       <ConfirmDialog
         open={pendingTemplate !== null}
