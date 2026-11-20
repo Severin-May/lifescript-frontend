@@ -27,7 +27,6 @@ const today = new Date()
 const all = snippets(today)
 const sections = all.filter(s => s.section)
 const entries = all.filter(s => !s.section)
-const headerOf = (entry) => `${entry.label.split(' ')[0]}s`
 
 const minimal = templates.find(t => t.id === 'minimal').build(today)
 
@@ -48,7 +47,7 @@ describe('snippets contract', () => {
 
   describe.each(templates.map(t => [t.title, t]))('added to the %s template', (_, template) => {
     it.each(entries.map(e => [e.label, e]))('the %s entry is valid', async (_, entry) => {
-      const plan = insertUnderHeader(template.build(today), headerOf(entry), withDefaults(entry.body).trimEnd())
+      const plan = insertUnderHeader(template.build(today), entry.in, withDefaults(entry.body).trimEnd())
 
       const result = await compile(plan)
 

@@ -9,10 +9,21 @@ export const PROPERTIES = [
   'duration', 'priority', 'effort', 'deadline', 'repeats', 'dependencies', 'note', 'time', 'date'
 ]
 
-export const VALUES = [
-  'high', 'moderate', 'low', 'critical', 'medium',
-  'morning', 'afternoon', 'evening', 'flexible',
-  'daily', 'weekdays', 'weekends', 'to'
-]
-
 export const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+
+export const PRIORITIES = ['critical', 'high', 'medium', 'low']
+export const ENERGY_LEVELS = ['high', 'moderate', 'low']
+export const PERIODS = ['morning', 'afternoon', 'evening']
+export const DAY_GROUPS = ['daily', 'weekdays', 'weekends']
+
+export const VALUES = [...new Set([
+  ...PRIORITIES, ...ENERGY_LEVELS, ...PERIODS, 'flexible', ...DAY_GROUPS, 'to'
+])]
+
+export const SECTIONS = ['settings', 'availability', 'energy profile', 'routines', 'tasks', 'events']
+
+export const ENTRY_PROPERTIES = {
+  task: { required: ['duration', 'priority', 'effort'], optional: ['deadline', 'repeats', 'dependencies', 'note', 'break'] },
+  routine: { required: ['time', 'repeats', 'activities'] },
+  event: { required: ['date', 'time'], optional: ['note'] }
+}

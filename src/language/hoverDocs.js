@@ -1,11 +1,11 @@
-import { DAYS } from './keywords'
+import { DAYS, PRIORITIES, ENERGY_LEVELS, DAY_GROUPS, SECTIONS, ENTRY_PROPERTIES } from './keywords'
 
 // An entry is either a doc or the name of the entry it shares a doc with.
 // Words in `backticks` show as code; lists are shown as code automatically.
 export const docs = {
   plan: {
     text: 'The start of every plan: `plan: <name>`, followed by `period`.',
-    optional: ['settings', 'availability', 'energy profile', 'routines', 'tasks', 'events']
+    optional: SECTIONS
   },
   period: {
     text: 'The days the plan covers: 1 to 7 days, not in the past.',
@@ -34,7 +34,7 @@ export const docs = {
   },
   routine: {
     text: 'A fixed block of activities that repeats. `time` is when it starts.',
-    required: ['time', 'repeats', 'activities']
+    ...ENTRY_PROPERTIES.routine
   },
   routines: 'routine',
   activities: {
@@ -42,14 +42,12 @@ export const docs = {
   },
   task: {
     text: 'Something to get done; the scheduler finds a time for it.',
-    required: ['duration', 'priority', 'effort'],
-    optional: ['deadline', 'repeats', 'dependencies', 'note', 'break']
+    ...ENTRY_PROPERTIES.task
   },
   tasks: 'task',
   event: {
     text: 'A one-off appointment at a fixed date and time.',
-    required: ['date', 'time'],
-    optional: ['note']
+    ...ENTRY_PROPERTIES.event
   },
   events: 'event',
   duration: {
@@ -58,11 +56,11 @@ export const docs = {
   },
   priority: {
     text: 'How important the task is.',
-    values: ['critical', 'high', 'medium', 'low']
+    values: PRIORITIES
   },
   effort: {
     text: 'How much energy the task needs; matched against your `energy profile`.',
-    values: ['high', 'moderate', 'low']
+    values: ENERGY_LEVELS
   },
   deadline: {
     text: 'When the task must be done by: date and time.',
@@ -70,7 +68,7 @@ export const docs = {
   },
   repeats: {
     text: 'Which days of the period it happens on.',
-    values: ['daily', 'weekdays', 'weekends', 'monday, wednesday']
+    values: [...DAY_GROUPS, 'monday, wednesday']
   },
   dependencies: {
     text: 'Tasks that must be done before this one.',
