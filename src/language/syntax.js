@@ -48,3 +48,17 @@ export const theme = {
     'editorLightBulbAutoFix.foreground': '#FFCC00'
   }
 }
+
+export const tokenColors = Object.fromEntries(theme.rules.map(({ token, foreground }) => [token, `#${foreground}`]))
+
+// The token the start of `text` gets in the editor, by the tokenizer's own rules; for coloring outside it.
+export function tokenType(text) {
+  for (const [regex, action] of tokenizer.tokenizer.root) {
+    const match = text.match(new RegExp(`^(?:${regex.source})`, 'iu'))
+    if (!match) continue
+    if (typeof action === 'string') return action
+    const word = match[0].toLowerCase()
+    return Object.entries(action.cases).find(([list]) => list === '@default' || tokenizer[list.slice(1)].includes(word))[1]
+  }
+  return null
+}

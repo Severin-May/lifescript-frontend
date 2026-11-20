@@ -1,12 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { tokenizer } from '../../../src/language/syntax'
-
-// Resolves a name the way Monarch does: the first matching case wins, compared in lower case (ignoreCase).
-function tokenOf(word) {
-  const [, { cases }] = tokenizer.tokenizer.root.find(([, action]) => action.cases)
-  const match = Object.entries(cases).find(([list]) => list === '@default' || tokenizer[list.slice(1)].includes(word.toLowerCase()))
-  return match[1]
-}
+import { tokenType as tokenOf, tokenColors } from '../../../src/language/syntax'
 
 describe('tokenizer', () => {
   it.each(['break', 'Break', 'BREAK'])('colors %s as a keyword', (word) => {
@@ -15,5 +8,20 @@ describe('tokenizer', () => {
 
   it('colors other names as identifiers', () => {
     expect(tokenOf('breakfast')).toBe('identifier')
+  })
+})
+
+describe('tokenType', () => {
+  it.each([
+    ['tasks', 'keyword'], ['priority', 'property'], ['High', 'value'], ['monday … sunday', 'day'],
+    ['2026-11-10 17:00', 'date'], ['09:00-12:00', 'time'], ['1h30m', 'duration'], ['"a note"', 'string'],
+    ['name', 'identifier'], ['…', null]
+  ])('gives %s the token %s', (text, token) => {
+    expect(tokenOf(text)).toBe(token)
+  })
+
+  it('has a color for each themed token', () => {
+    expect(tokenColors.keyword).toBe('#569cd6')
+    expect(tokenColors.identifier).toBeUndefined()
   })
 })

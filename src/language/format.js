@@ -1,5 +1,5 @@
 import { parse } from './context'
-import { SECTIONS, DAYS, PERIODS, ENTRY_PROPERTIES } from './keywords'
+import { SECTIONS, PERIODS, ENTRY_PROPERTIES, SECTION_KEYS } from './keywords'
 
 // Re-indents a plan to 4 spaces per level. A line's depth comes from what it is (section, entry, property),
 // so a misplaced property moves under its entry; lines that can't be placed keep their position relative
@@ -10,12 +10,6 @@ const TOP_LEVEL = ['plan', 'period', ...SECTIONS]
 const ENTRIES = Object.keys(ENTRY_PROPERTIES)
 const PROPERTIES = [...new Set(Object.values(ENTRY_PROPERTIES).flatMap(p => [...p.required, ...(p.optional ?? [])]))]
 const ROUTINE_PROPERTIES = ENTRY_PROPERTIES.routine.required
-
-const SECTION_KEYS = {
-  availability: DAYS,
-  settings: [...PERIODS, 'break'],
-  'energy profile': ['default', ...DAYS]
-}
 
 // The depth of a known key, updating where we are; null for a key whose place isn't known.
 function knownDepth(key, state) {

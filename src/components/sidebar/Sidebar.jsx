@@ -9,13 +9,13 @@ const views = [
   { id: 'cheatsheet', label: 'Cheat sheet', Icon: BookIcon }
 ]
 
-function Sidebar({ explorer }) {
+function Sidebar({ explorer, cheatSheet }) {
   const [activeId, setActiveId] = useState('explorer')
   const toggle = (id) => setActiveId(current => current === id ? null : id)
 
   const panels = {
     explorer: () => <ExplorerPanel {...explorer} />,
-    cheatsheet: () => <CheatSheetPanel />
+    cheatsheet: () => <CheatSheetPanel {...cheatSheet} />
   }
   const active = views.find(view => view.id === activeId)
 

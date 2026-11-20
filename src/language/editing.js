@@ -28,3 +28,12 @@ export function keybindingRules(monaco) {
     { keybinding: KeyMod.Shift | KeyMod.Alt | KeyCode.KeyN, command: 'editor.action.marker.prev' }
   ]
 }
+
+// Shown in the cheat sheet; Ctrl+Space and Shift+Alt+F are Monaco's own, Ctrl+S is useSaveShortcut.
+export const SHORTCUTS = [
+  { keys: 'Ctrl+Space', action: 'show suggestions' },
+  { keys: 'Shift+Alt+F', action: 'format the plan' },
+  { keys: 'Alt+N', action: 'next problem' },
+  { keys: 'Shift+Alt+N', action: 'previous problem' },
+  { keys: 'Ctrl+S', action: 'save' }
+]

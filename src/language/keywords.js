@@ -27,3 +27,9 @@ export const ENTRY_PROPERTIES = {
   routine: { required: ['time', 'repeats', 'activities'] },
   event: { required: ['date', 'time'], optional: ['note'] }
 }
+
+export const SECTION_KEYS = {
+  availability: DAYS,
+  settings: [...PERIODS, 'break'],
+  'energy profile': ['default', ...DAYS]
+}

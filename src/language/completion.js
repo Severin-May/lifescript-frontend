@@ -1,6 +1,6 @@
 import { snippets } from './snippets'
 import { contextAt, taskNames } from './context'
-import { DAYS, PRIORITIES, ENERGY_LEVELS, PERIODS, DAY_GROUPS, ENTRY_PROPERTIES } from './keywords'
+import { DAYS, PRIORITIES, ENERGY_LEVELS, PERIODS, DAY_GROUPS, ENTRY_PROPERTIES, SECTION_KEYS } from './keywords'
 
 // What may follow `key:` in a block. `more`: what may follow a comma; without it, a single value.
 const VALUE_RULES = [
@@ -22,9 +22,9 @@ const KEY_RULES = [
   entryKeys('task', 'tasks'),
   { ...entryKeys('routine', 'routines'), nested: ['activities'] },
   entryKeys('event', 'events'),
-  { section: 'availability', blocks: ['availability'], keys: DAYS },
-  { section: 'settings', blocks: ['settings'], keys: [...PERIODS, 'break'] },
-  { section: 'energy profile', blocks: ['energy profile'], keys: ['default', ...DAYS], nested: ['default', ...DAYS] },
+  { section: 'availability', blocks: ['availability'], keys: SECTION_KEYS.availability },
+  { section: 'settings', blocks: ['settings'], keys: SECTION_KEYS.settings },
+  { section: 'energy profile', blocks: ['energy profile'], keys: SECTION_KEYS['energy profile'], nested: SECTION_KEYS['energy profile'] },
   { section: 'energy profile', blocks: ['default', ...DAYS], keys: PERIODS }
 ]
 

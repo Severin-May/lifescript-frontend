@@ -10,6 +10,7 @@ import ConfirmDialog from './components/ConfirmDialog'
 import AccountButton from './components/AccountButton'
 import AuthDialog from './components/AuthDialog'
 import SaveDialog from './components/SaveDialog'
+import { insertSnippet } from './language/insertSnippet'
 import PlanTitle from './components/PlanTitle'
 import { useAuth } from './hooks/useAuth'
 import { usePlanList } from './hooks/usePlanList'
@@ -109,6 +110,9 @@ function App() {
             onNew: () => unlessUnsaved(savedPlan.newPlan),
             onDelete: deletePlan,
             onLoginClick: () => setAuthMode('login')
+          }}
+          cheatSheet={{
+            onInsert: (label) => editorRef.current && insertSnippet(editorRef.current, label)
           }}
         />
         <div className='flex flex-col flex-1 overflow-hidden'>
