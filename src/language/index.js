@@ -3,6 +3,7 @@ import { languageConfiguration, keybindingRules } from './editing'
 import { completionProvider } from './completion'
 import { hoverDoc } from './hoverDocs'
 import { quickFixProvider } from './quickFixes'
+import { formattingEdits } from './format'
 
 export const LANGUAGE_ID = 'lifescript'
 export const THEME_ID = 'lifescript-theme'
@@ -23,6 +24,9 @@ export function registerLifeScript(monaco) {
     monaco.languages.registerCompletionItemProvider(LANGUAGE_ID, completionProvider(monaco)),
     monaco.languages.registerCodeActionProvider(LANGUAGE_ID, quickFixProvider(monaco), {
       providedCodeActionKinds: ['quickfix']
+    }),
+    monaco.languages.registerDocumentFormattingEditProvider(LANGUAGE_ID, {
+      provideDocumentFormattingEdits: (model) => formattingEdits(model.getLinesContent())
     }),
     monaco.languages.registerHoverProvider(LANGUAGE_ID, {
       provideHover: (model, position) => {

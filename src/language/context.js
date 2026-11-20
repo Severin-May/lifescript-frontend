@@ -9,7 +9,7 @@ const stripComment = (text) => text.replace(/("[^"]*"?)|#.*/g, (match, quoted) =
 
 const normalizeKey = (key) => key.toLowerCase().replace(/\s+/g, ' ')
 
-function parse(line) {
+export function parse(line) {
   const text = stripComment(line)
   const match = text.match(HEADER)
   return {
