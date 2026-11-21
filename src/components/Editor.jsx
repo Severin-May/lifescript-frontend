@@ -1,3 +1,4 @@
+import '../monacoSetup'
 import MonacoEditor from '@monaco-editor/react'
 import { useRef, useEffect } from 'react'
 import { toMarkers } from '../diagnostics'
